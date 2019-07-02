@@ -19,6 +19,6 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "inquirer": "^6.4.1",
-    "msql": "^1.0.3"
+    "mysql": "^2.17.1"
   }
 }
