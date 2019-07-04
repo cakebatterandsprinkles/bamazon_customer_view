@@ -1,4 +1,4 @@
-### Bamazon: Customer View
+## Bamazon: Customer View
 
 :curly_loop: This node app uses a MySQL Database. Customers are shown all the available products first, then the app prompts users with two messages:
 
