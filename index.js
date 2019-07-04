@@ -54,7 +54,7 @@ function promptPurchase() {
           }
     }
     ]).then(function (response) {
-        connection.query("SELECT item_id, product_name, price, stock_quantity FROM products WHERE ?", {item_id : response.productId}, function (err, res) {
+        connection.query("SELECT item_id, product_name, price, stock_quantity, product_sales FROM products WHERE ?", {item_id : response.productId}, function (err, res) {
             if (err) throw err;
             let chosenName = res[0].product_name;
             let chosenItem = res.filter(function (item) {
@@ -62,14 +62,10 @@ function promptPurchase() {
                     return true;
                 }
                 return false;
-            })[0].item_id;
+            })[0];
             let chosenAmount = response.howMany;
-            let existingAmount = res.filter(function (item) {
-                if (item.item_id == response.productId) {
-                    return true;
-                }
-                return false;
-            })[0].stock_quantity;
+            let existingAmount = chosenItem.stock_quantity;
+            let currentSales = chosenItem.product_sales;
             if (chosenAmount > existingAmount) {
                 console.log(chalk.magenta("Insufficient quantity!"));
                 promptPurchase();
@@ -81,7 +77,8 @@ function promptPurchase() {
                 let leftAmount = existingAmount - chosenAmount;
                 // write a function that updates the database after purchase
                 connection.query("UPDATE products SET ? WHERE ?", [{
-                    stock_quantity: leftAmount
+                    stock_quantity: leftAmount,
+                    product_sales: currentSales + totalPrice
                 },
                 {
                     item_id : response.productId
